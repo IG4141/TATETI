@@ -2,20 +2,17 @@ const express = require('express');
 const app = express();
 const PUERTO = 3000;
 
-function verificarGanador(tablero) {
-    const combinacionesGanadoras = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]
-    ];
+function identificarJugador(tablero) {
+    const fichasX = tablero.filter(valor => valor === 1).length;
+    const fichasO = tablero.filter(valor => valor === 2).length;
     
-    for (let combinacion of combinacionesGanadoras) {
-        const [a, b, c] = combinacion;
-        if (tablero[a] !== 0 && tablero[a] === tablero[b] && tablero[b] === tablero[c]) {
-            return tablero[a];
-        }
+    if (fichasX === fichasO) {
+        return 1;
+    } else if (fichasX > fichasO) {
+        return 2;
+    } else {
+        return 1;
     }
-    return 0;
 }
 
 function obtenerPosicionesVacias(tablero) {
@@ -30,12 +27,28 @@ function realizarMovimiento(tablero, posicion, jugador) {
     return nuevoTablero;
 }
 
+function verificarGanador(tablero, jugador) {
+    const combinacionesGanadoras = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ];
+    
+    for (let combinacion of combinacionesGanadoras) {
+        const [a, b, c] = combinacion;
+        if (tablero[a] === jugador && tablero[b] === jugador && tablero[c] === jugador) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function intentarGanar(tablero, jugador) {
     const posicionesVacias = obtenerPosicionesVacias(tablero);
     
     for (let posicion of posicionesVacias) {
         const tableroPrueba = realizarMovimiento(tablero, posicion, jugador);
-        if (verificarGanador(tableroPrueba) === jugador) {
+        if (verificarGanador(tableroPrueba, jugador)) {
             return posicion;
         }
     }
@@ -64,7 +77,7 @@ function tomarLado(tablero) {
 }
 
 function obtenerMejorMovimiento(tablero) {
-    const jugadorIA = 2;
+    const jugadorIA = identificarJugador(tablero);
     
     let movimiento = intentarGanar(tablero, jugadorIA);
     if (movimiento !== null) return movimiento;
