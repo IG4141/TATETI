@@ -5,7 +5,7 @@
 
 - **Santiago Luna**
 - **Martin Sanches** 
-- **Nicolas Fernandes**
+- **Nicolas Fernandez**
 - **Ivo Guiliano**
 
 ---
