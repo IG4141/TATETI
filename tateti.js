@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PUERTO = 3000;
+const PUERTO = 3003;
 
 // Servidor principal para el juego de ta-te-ti con IA
 
