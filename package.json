@@ -3,9 +3,18 @@
   "version": "1.0.0",
   "main": "tateti.js",
   "scripts": {
-    "start": "node tateti.js"
+    "start": "node tateti.js",
+    "test": "jest --verbose",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

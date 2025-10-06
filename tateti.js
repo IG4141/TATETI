@@ -8,7 +8,7 @@ const PUERTO = 3000;
 function identificarJugador(tablero) {
     const fichasX = tablero.filter(valor => valor === 1).length;
     const fichasO = tablero.filter(valor => valor === 2).length;
-    
+
     // Si hay igual cantidad, es turno de X (jugador 1)
     if (fichasX === fichasO) {
         return 1;
@@ -33,23 +33,23 @@ function analizarColumna(tablero, posiciones, jugadorIA) {
     const fichasOponente = valores.filter(valor => valor !== jugadorIA && valor !== 0).length;
     const casillerosVacios = valores.filter(valor => valor === 0).length;
     const posicionVacia = posiciones.find(pos => tablero[pos] === 0);
-    
+
     // Prioridad 1: Victoria inminente (2 nuestras + 1 vacia)
     if (fichasIA === 2 && casillerosVacios === 1) {
         return { prioridad: 1, movimiento: posicionVacia };
-    } 
+    }
     // Prioridad 2: Bloquear al oponente (2 rivales + 1 vacia)
     else if (fichasOponente === 2 && casillerosVacios === 1) {
         return { prioridad: 2, movimiento: posicionVacia };
-    } 
+    }
     // Prioridad 3: Posibilidad de victoria (1 nuestra + 2 vacias)
     else if (fichasIA === 1 && casillerosVacios === 2) {
         return { prioridad: 3, movimiento: posicionVacia };
-    } 
+    }
     // Prioridad 4: Empate (1 nuestra + 1 rival + 1 vacia)
     else if (fichasIA === 1 && fichasOponente === 1 && casillerosVacios === 1) {
         return { prioridad: 4, movimiento: posicionVacia };
-    } 
+    }
     // Prioridad 5: No relevante (totalmente vacia, ocupada o 1 rival)
     else {
         return { prioridad: 5, movimiento: posicionVacia };
@@ -112,16 +112,16 @@ function tomarEsquina(tablero) {
 // Funcion principal que coordina toda la logica de decision de la IA
 function obtenerMejorMovimiento(tablero) {
     const jugadorIA = identificarJugador(tablero);
-    
+
     // Si es el primer movimiento, siempre tomar centro o esquina
     if (esPrimerMovimiento(tablero)) {
         const centro = tomarCentro(tablero);
         if (centro !== null) return centro;
-        
+
         const esquina = tomarEsquina(tablero);
         if (esquina !== null) return esquina;
     }
-    
+
     // Analizar todas las 8 columnas posibles (3 filas + 3 columnas + 2 diagonales)
     const resultados = [
         analizarFila1(tablero, jugadorIA),
@@ -133,20 +133,20 @@ function obtenerMejorMovimiento(tablero) {
         analizarDiagonal1(tablero, jugadorIA),
         analizarDiagonal2(tablero, jugadorIA)
     ];
-    
+
     // Filtrar solo los resultados que tienen un movimiento valido
     const resultadosValidos = resultados.filter(resultado => resultado.movimiento !== undefined);
-    
+
     // Si no hay resultados validos, tomar cualquier posicion vacia
     if (resultadosValidos.length === 0) {
         const posicionesVacias = obtenerPosicionesVacias(tablero);
         return posicionesVacias[0];
     }
-    
+
     // Encontrar la mejor prioridad (numero mas bajo = mayor prioridad)
     const mejorPrioridad = Math.min(...resultadosValidos.map(r => r.prioridad));
     const mejoresOpciones = resultadosValidos.filter(r => r.prioridad === mejorPrioridad);
-    
+
     // Si hay empate en prioridad, elegir una opcion al azar
     const opcionElegida = mejoresOpciones[Math.floor(Math.random() * mejoresOpciones.length)];
     return opcionElegida.movimiento;
@@ -167,16 +167,22 @@ app.get('/move', (req, res) => {
     const posicionesVacias = tablero
         .map((valor, indice) => valor === 0 ? indice : null)
         .filter(indice => indice !== null);
-    
+
     if (posicionesVacias.length === 0) {
         return res.status(400).json({ error: 'No hay movimientos disponibles.' });
     }
-    
+
     const movimiento = obtenerMejorMovimiento(tablero);
     res.json({ movimiento: movimiento });
 });
 
-// Iniciar el servidor en el puerto configurado
+/* Iniciar el servidor en el puerto configurado
 app.listen(PUERTO, () => {
     console.log(`Servidor de tateti escuchando en el puerto ${PUERTO}`);
-});
+});*/
+
+module.exports = {
+    identificarJugador,
+    analizarColumna1,
+    obtenerMejorMovimiento
+}
