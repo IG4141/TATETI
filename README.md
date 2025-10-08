@@ -4,9 +4,9 @@
 ##  Autores
 
 - **Santiago Luna**
-- **Martin Sanches** 
-- **Nicolas Fernandes**
-- **Ivo Guiliano**
+- **Martin Sanchez** 
+- **Nicolas Fernandez**
+- **Ivo Guiliano Capetto**
 
 ---
 

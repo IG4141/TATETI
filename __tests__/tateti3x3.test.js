@@ -82,7 +82,7 @@ describe("Obtener Mejor movimiento", () => {
         expect(result).toStrictEqual(8)
     })
     test("empatar", () => {
-        let tablero = [1, 2, 2, 0, 1, 0, 1, 0, 0]
+        let tablero = [1, 2, 2, 2, 1, 0, 1, 0, 0]
         result = obtenerMejorMovimiento(tablero)
         expect(result).toStrictEqual(8)
     })
