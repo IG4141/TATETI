@@ -1,6 +1,6 @@
-const { identificarJugador } = require('../tateti.js')
-const { analizarColumna1 } = require('../tateti.js')
-const { obtenerMejorMovimiento } = require('../tateti.js')
+const { identificarJugador } = require('../utils/tateti3x3.js')
+const { analizarColumna1 } = require('../utils/tateti3x3.js')
+const { obtenerMejorMovimiento } = require('../utils/tateti3x3.js')
 describe('jugador identificado', () => {
     test("identificar jugador x al principio", () => {
         tablero = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -30,6 +30,9 @@ describe('jugador identificado', () => {
     })
 });
 
+
+
+
 describe("Analizar Columna1", () => {
     test("Elegir movimieto ganador", () => {
         let tablero = [1, 0, 0, 1, 0, 0, 0, 0, 0]
@@ -45,6 +48,8 @@ describe("Analizar Columna1", () => {
 
     })
 })
+
+
 
 describe("Obtener Mejor movimiento", () => {
     test("obtener el centro", () => {

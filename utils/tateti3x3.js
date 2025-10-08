@@ -176,6 +176,14 @@ app.get('/move', (req, res) => {
     res.json({ movimiento: movimiento });
 });
 
+/*   ARREGLAR
+   
+por alguna razon cuando quiero ejecutar el test con este pedazo de codigo no funciona correctamente:
+(Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. 
+Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.)
+
 /* Iniciar el servidor en el puerto configurado
 app.listen(PUERTO, () => {
     console.log(`Servidor de tateti escuchando en el puerto ${PUERTO}`);
