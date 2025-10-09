@@ -136,7 +136,7 @@ function obtenerMejorMovimiento(tablero) {
         [5, 11, 17, 23]
     ]
     for (let i = 0; i < columnas.length; i++) {
-        resultados += analizarColumna(tablero, columnas[i], jugadorIA);
+        resultados.push(analizarColumna(tablero, columnas[i], jugadorIA));
     }
     // Filtrar solo los resultados que tienen un movimiento valido
     const resultadosValidos = resultados.filter(resultado => resultado.movimiento !== undefined);
@@ -188,10 +188,10 @@ por alguna razon cuando quiero ejecutar el test con este pedazo de codigo no fun
 'This usually means that there are asynchronous operations that weren't stopped in your tests. 
 Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.)*/
 
-//Iniciar el servidor en el puerto configurado
+/*Iniciar el servidor en el puerto configurado
 app.listen(PUERTO, () => {
     console.log(`Servidor de tateti escuchando en el puerto ${PUERTO}`);
-});
+});*/
 
 module.exports = {
     identificarJugador,
