@@ -135,7 +135,7 @@ function obtenerMejorMovimiento(tablero) {
         [1, 7, 13, 19],
         [5, 11, 17, 23]
     ]
-    for (let i = 0; i > columnas.length; i++) {
+    for (let i = 0; i < columnas.length; i++) {
         resultados += analizarColumna(tablero, columnas[i], jugadorIA);
     }
     // Filtrar solo los resultados que tienen un movimiento valido
