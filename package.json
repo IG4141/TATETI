@@ -1,9 +1,9 @@
 {
   "name": "tateti-server",
   "version": "1.0.0",
-  "main": "tateti.js",
+  "main": "tateti5x5.js",
   "scripts": {
-    "start": "node tateti.js",
+    "start": "node tateti5x5.js",
     "test": "jest --verbose --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"

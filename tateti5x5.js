@@ -188,10 +188,10 @@ por alguna razon cuando quiero ejecutar el test con este pedazo de codigo no fun
 'This usually means that there are asynchronous operations that weren't stopped in your tests. 
 Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.)*/
 
-/*Iniciar el servidor en el puerto configurado
+//niciar el servidor en el puerto configurado
 app.listen(PUERTO, () => {
     console.log(`Servidor de tateti escuchando en el puerto ${PUERTO}`);
-});*/
+});
 
 module.exports = {
     identificarJugador,
