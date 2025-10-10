@@ -34,62 +34,37 @@ function analizarColumna(tablero, posiciones, jugadorIA) {
     const casillerosVacios = valores.filter(valor => valor === 0).length;
     const posicionVacia = posiciones.find(pos => tablero[pos] === 0);
 
-    // Prioridad 1: Victoria inminente (2 nuestras + 1 vacia)
-    if (fichasIA === 2 && casillerosVacios === 1) {
+    // Prioridad 1: Victoria inminente (3 nuestras + 1 vacia)
+    if (fichasIA === 3 && casillerosVacios === 1) {
         return { prioridad: 1, movimiento: posicionVacia };
     }
-    // Prioridad 2: Bloquear al oponente (2 rivales + 1 vacia)
-    else if (fichasOponente === 2 && casillerosVacios === 1) {
+    // Prioridad 2: Bloquear al oponente (3 rivales + 1 vacia)
+    else if (fichasOponente === 3 && casillerosVacios === 1) {
         return { prioridad: 2, movimiento: posicionVacia };
     }
-    // Prioridad 3: Posibilidad de victoria (1 nuestra + 2 vacias)
-    else if (fichasIA === 1 && casillerosVacios === 2) {
+    // Prioridad 3: Bloquear al oponente (2 rivales + 2 vacias)
+    else if (fichasOponente === 2 && casillerosVacios === 2) {
         return { prioridad: 3, movimiento: posicionVacia };
     }
-    // Prioridad 4: Empate (1 nuestra + 1 rival + 1 vacia)
-    else if (fichasIA === 1 && fichasOponente === 1 && casillerosVacios === 1) {
+    // Prioridad 4: Posibilidad de victoria
+    else if (fichasIA === 2 && casillerosVacios === 2) {
         return { prioridad: 4, movimiento: posicionVacia };
     }
-    // Prioridad 5: No relevante (totalmente vacia, ocupada o 1 rival)
-    else {
+    // Prioridad 5: Posibiliad de victoria (1 nuestra + 3 vacias)
+    else if (fichasIA === 1 && casillerosVacios === 3) {
         return { prioridad: 5, movimiento: posicionVacia };
+    }
+    // Prioridad 6: Bloquear al rival (1 rival + 3 vacias)
+    else if (fichasOponente === 1 && casillerosVacios === 3) {
+        return { prioridad: 6, movimiento: posicionVacia }
+    }
+    // Prioridad 7: Empate (totalmente vacia, ocupada por ambos)
+    else {
+        return { prioridad: 7, movimiento: posicionVacia };
     }
 }
 
-// Funciones para analizar cada fila horizontal
-function analizarFila1(tablero, jugadorIA) {
-    return analizarColumna(tablero, [0, 1, 2], jugadorIA);
-}
 
-function analizarFila2(tablero, jugadorIA) {
-    return analizarColumna(tablero, [3, 4, 5], jugadorIA);
-}
-
-function analizarFila3(tablero, jugadorIA) {
-    return analizarColumna(tablero, [6, 7, 8], jugadorIA);
-}
-
-// Funciones para analizar cada columna vertical
-function analizarColumna1(tablero, jugadorIA) {
-    return analizarColumna(tablero, [0, 3, 6], jugadorIA);
-}
-
-function analizarColumna2(tablero, jugadorIA) {
-    return analizarColumna(tablero, [1, 4, 7], jugadorIA);
-}
-
-function analizarColumna3(tablero, jugadorIA) {
-    return analizarColumna(tablero, [2, 5, 8], jugadorIA);
-}
-
-// Funciones para analizar las diagonales
-function analizarDiagonal1(tablero, jugadorIA) {
-    return analizarColumna(tablero, [0, 4, 8], jugadorIA);
-}
-
-function analizarDiagonal2(tablero, jugadorIA) {
-    return analizarColumna(tablero, [2, 4, 6], jugadorIA);
-}
 
 // Verifica si es el primer movimiento del juego (maximo 1 ficha en el tablero)
 function esPrimerMovimiento(tablero) {
@@ -99,12 +74,12 @@ function esPrimerMovimiento(tablero) {
 
 // Toma el centro si esta disponible (posicion 4)
 function tomarCentro(tablero) {
-    return tablero[4] === 0 ? 4 : null;
+    return tablero[12] === 0 ? 12 : null;
 }
 
 // Toma una esquina si esta disponible (posiciones 0, 2, 6, 8)
 function tomarEsquina(tablero) {
-    const esquinas = [0, 2, 6, 8];
+    const esquinas = [6, 8, 16, 18];
     const esquinasDisponibles = esquinas.filter(pos => tablero[pos] === 0);
     return esquinasDisponibles.length > 0 ? esquinasDisponibles[0] : null;
 }
@@ -112,7 +87,7 @@ function tomarEsquina(tablero) {
 // Funcion principal que coordina toda la logica de decision de la IA
 function obtenerMejorMovimiento(tablero) {
     const jugadorIA = identificarJugador(tablero);
-
+    let resultados = []
     // Si es el primer movimiento, siempre tomar centro o esquina
     if (esPrimerMovimiento(tablero)) {
         const centro = tomarCentro(tablero);
@@ -121,19 +96,47 @@ function obtenerMejorMovimiento(tablero) {
         const esquina = tomarEsquina(tablero);
         if (esquina !== null) return esquina;
     }
-
-    // Analizar todas las 8 columnas posibles (3 filas + 3 columnas + 2 diagonales)
-    const resultados = [
-        analizarFila1(tablero, jugadorIA),
-        analizarFila2(tablero, jugadorIA),
-        analizarFila3(tablero, jugadorIA),
-        analizarColumna1(tablero, jugadorIA),
-        analizarColumna2(tablero, jugadorIA),
-        analizarColumna3(tablero, jugadorIA),
-        analizarDiagonal1(tablero, jugadorIA),
-        analizarDiagonal2(tablero, jugadorIA)
-    ];
-
+    const columnas = [
+        // verticales
+        [0, 5, 10, 15],
+        [1, 6, 11, 16],
+        [2, 7, 12, 17],
+        [3, 8, 13, 18],
+        [4, 9, 14, 19],
+        // verticales (desde abajo)
+        [20, 15, 10, 5],
+        [21, 16, 11, 6],
+        [22, 17, 12, 7],
+        [23, 18, 13, 8],
+        [24, 19, 14, 9],
+        // horizontales
+        [0, 1, 2, 3],
+        [5, 6, 7, 8],
+        [10, 11, 12, 13],
+        [15, 16, 17, 18],
+        [20, 21, 22, 23],
+        // horizontales (desde la izquierda)
+        [4, 3, 2, 1],
+        [9, 8, 7, 6],
+        [14, 13, 12, 11],
+        [19, 18, 17, 16],
+        [24, 23, 22, 21],
+        // diagonales
+        [0, 6, 12, 18],
+        [20, 16, 12, 8],
+        // diagonales (desde la izquierda)
+        [4, 8, 12, 16],
+        [24, 18, 12, 6],
+        // diagonales de 4
+        [15, 11, 7, 3],
+        [21, 17, 13, 9],
+        // diagonales de 4(desde arriba)
+        [1, 7, 13, 19],
+        [5, 11, 17, 23]
+    ]
+    for (let i = 0; i < columnas.length; i++) {
+        resultados.push(analizarColumna(tablero, columnas[i], jugadorIA));
+    }
     // Filtrar solo los resultados que tienen un movimiento valido
     const resultadosValidos = resultados.filter(resultado => resultado.movimiento !== undefined);
 
@@ -161,8 +164,8 @@ app.get('/move', (req, res) => {
     } catch (e) {
         return res.status(400).json({ error: 'Parámetro board inválido. Debe ser un array JSON.' });
     }
-    if (!Array.isArray(tablero) || tablero.length !== 9) {
-        return res.status(400).json({ error: 'El tablero debe ser un array de 9 posiciones.' });
+    if (!Array.isArray(tablero) || tablero.length !== 25) {
+        return res.status(400).json({ error: 'El tablero debe ser un array de 25 posiciones.' });
     }
     const posicionesVacias = tablero
         .map((valor, indice) => valor === 0 ? indice : null)
@@ -178,7 +181,8 @@ app.get('/move', (req, res) => {
 
 
 
-// Iniciar el servidor en el puerto configurado
+
+//Iniciar el servidor en el puerto 
 if (require.main === module) {
     app.listen(PUERTO, () => {
         console.log(`Servidor de tateti escuchando en el puerto ${PUERTO}`);
@@ -187,6 +191,7 @@ if (require.main === module) {
 
 module.exports = {
     identificarJugador,
-    analizarColumna1,
+    obtenerPosicionesVacias,
+    analizarColumna,
     obtenerMejorMovimiento
 }
