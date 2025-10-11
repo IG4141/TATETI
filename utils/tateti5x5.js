@@ -32,8 +32,13 @@ function analizarColumna(tablero, posiciones, jugadorIA) {
     const fichasIA = valores.filter(valor => valor === jugadorIA).length;
     const fichasOponente = valores.filter(valor => valor !== jugadorIA && valor !== 0).length;
     const casillerosVacios = valores.filter(valor => valor === 0).length;
-    const posicionVacia = posiciones.find(pos => tablero[pos] === 0);
-
+    const posicionVacia = posiciones.findLast(pos => tablero[pos] === 0);
+    const diagonalesde4 = [
+        [15, 11, 7, 3],
+        [21, 17, 13, 9],
+        [1, 7, 13, 19],
+        [5, 11, 17, 23]
+    ]
     // Prioridad 1: Victoria inminente (3 nuestras + 1 vacia)
     if (fichasIA === 3 && casillerosVacios === 1) {
         return { prioridad: 1, movimiento: posicionVacia };
@@ -42,20 +47,26 @@ function analizarColumna(tablero, posiciones, jugadorIA) {
     else if (fichasOponente === 3 && casillerosVacios === 1) {
         return { prioridad: 2, movimiento: posicionVacia };
     }
-    // Prioridad 3: Bloquear al oponente (2 rivales + 2 vacias)
-    else if (fichasOponente === 2 && casillerosVacios === 2) {
+    // Prioridad 3: Posibilidad de victoria (2 nuestras + 2 vacias)
+    else if (fichasIA === 2 && casillerosVacios === 2) {
         return { prioridad: 3, movimiento: posicionVacia };
     }
-    // Prioridad 4: Posibilidad de victoria
-    else if (fichasIA === 2 && casillerosVacios === 2) {
+    // Prioridad 4: Bloquear al oponente (2 rivales + 2 vacias)
+    else if (fichasOponente === 2 && casillerosVacios === 2) {
         return { prioridad: 4, movimiento: posicionVacia };
+    }  // Prioridad 4.1: Posibilidad de victoria (2 nuestras + 2 vacias)
+    else if (posiciones.includes(diagonalesde4) && fichasIA === 2 && casillerosVacios === 2) {
+        return { prioridad: 4.1, movimiento: posicionVacia };
     }
-    // Prioridad 5: Posibiliad de victoria (1 nuestra + 3 vacias)
-    else if (fichasIA === 1 && casillerosVacios === 3) {
+    // Prioridad 4.2: Bloquear al oponente en diagonal de 4 casilleros (2 rivales + 2 vacias menos importante ) 
+    else if (posiciones.includes(diagonalesde4) && fichasOponente === 2 && casillerosVacios === 2)
+        return { prioridad: 4.2, movimiento: posicionVacia }
+    // Prioridad 5: Bloquear al rival (1 rival + 3 vacias)
+    else if (fichasOponente === 1 && casillerosVacios === 3) {
         return { prioridad: 5, movimiento: posicionVacia };
     }
-    // Prioridad 6: Bloquear al rival (1 rival + 3 vacias)
-    else if (fichasOponente === 1 && casillerosVacios === 3) {
+    // Prioridad 6: Posibiliad de victoria (1 nuestra + 3 vacias)
+    else if (fichasIA === 1 && casillerosVacios === 3) {
         return { prioridad: 6, movimiento: posicionVacia }
     }
     // Prioridad 7: Empate (totalmente vacia, ocupada por ambos)
