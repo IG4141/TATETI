@@ -43,4 +43,5 @@ describe('jugador identificado', () => {
         const result = identificarJugador(tablero)
         expect(result).toBe(2)
     })
-});
+})
+
