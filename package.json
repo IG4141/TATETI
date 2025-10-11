@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "tateti5x5.js",
   "scripts": {
-    "start": "node tateti5x5.js",
+    "start": "node utils\\tateti5x5.js",
     "test": "jest --verbose --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage"
