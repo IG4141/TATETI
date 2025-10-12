@@ -150,6 +150,22 @@ function detectarAmenazasInmediatas(tablero, simbolo) {
     return [...new Set(amenazas)];
 }
 
+// Devuelve posiciones vacias en lineas donde 'simbolo' tiene exactamente 2 fichas y 2 vacios
+function detectarAmenazasPotenciales(tablero, simbolo) {
+    const posiciones = [];
+    for (const linea of LINEAS_4) {
+        const valores = linea.map(pos => tablero[pos]);
+        const contadorSimbolo = valores.filter(v => v === simbolo).length;
+        const contadorVacios = valores.filter(v => v === 0).length;
+        if (contadorSimbolo === 2 && contadorVacios === 2) {
+            for (const pos of linea) {
+                if (tablero[pos] === 0) posiciones.push(pos);
+            }
+        }
+    }
+    return [...new Set(posiciones)];
+}
+
 // Cuenta cuantas victorias inmediatas (3 en linea + 1 vacio) tiene un simbolo en el tablero
 function contarVictoriasInmediatas(tablero, simbolo) {
     return detectarAmenazasInmediatas(tablero, simbolo).length;
@@ -196,6 +212,23 @@ function obtenerMejorMovimiento(tablero, profundidadMaxima = 4) {
                 mejorPos = pos;
             }
             if (mejorScore === 0) break; // óptimo
+        }
+        return mejorPos;
+    }
+
+    // 3b) Bloquear amenazas potenciales (rival tiene 2 en linea y 2 vacios)
+    const potenciales = detectarAmenazasPotenciales(tablero, simboloRival);
+    if (potenciales.length > 0) {
+        // Elegir la posicion que minimice las victorias inmediatas del rival despues de nuestro movimiento
+        let mejorPos = potenciales[0];
+        let mejorScore = Infinity;
+        for (const pos of potenciales) {
+            const victoriasTras = victoriasRivalDespuesDe(tablero, pos, jugadorIA);
+            if (victoriasTras < mejorScore) {
+                mejorScore = victoriasTras;
+                mejorPos = pos;
+            }
+            if (mejorScore === 0) break;
         }
         return mejorPos;
     }
