@@ -1,10 +1,7 @@
 const express = require('express');
 const app = express();
-<<<<<<< HEAD:tateti.js
-const PUERTO = 3003;
-=======
 const PUERTO = process.env.PORT || 3003;
->>>>>>> tateti5x5:utils/tateti3x3.js
+
 
 // Servidor principal para el juego de ta-te-ti con IA
 
