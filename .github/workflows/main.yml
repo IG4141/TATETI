@@ -1,0 +1,5 @@
+npm ci                   # instala dependencias
+npm test                  # corre pruebas
+npx vercel pull --yes --environment=production  # sincroniza con Vercel
+npx vercel build --prod    # build de producción
+npx vercel deploy --prebuilt --prod  # deploy final
